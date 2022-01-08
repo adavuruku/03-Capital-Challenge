@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import * as bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt';
 // import ejs from 'ejs';
-import *  as randomstring from 'randomstring';
+import * as randomstring from 'randomstring';
 
 // const dayjs = require('dayjs');
 // let timezone = require('dayjs/plugin/timezone');
@@ -30,10 +30,10 @@ import *  as randomstring from 'randomstring';
  * @return {Date} The date
  */
 export const addHourToDate = (size) => {
-	const date = new Date();
-	let hours = date.getHours() + 1;
-	date.setHours(hours);
-	return date;
+  const date = new Date();
+  const hours = date.getHours() + 1;
+  date.setHours(hours);
+  return date;
 };
 
 /**
@@ -42,16 +42,16 @@ export const addHourToDate = (size) => {
  * @return {String} The code
  */
 export const generateOTCode = (size = 6, alpha = false) => {
-	return randomstring.generate(size);
-	// let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
-	// const chars = characters.split('');
-	// let selections = '';
-	// for (let i = 0; i < size; i++) {
-	// 	let index = Math.floor(Math.random() * characters.length);
-	// 	selections += characters[index];
-	// 	chars.splice(index, 1);
-	// }
-	// return selections;
+  return randomstring.generate(size);
+  // let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
+  // const chars = characters.split('');
+  // let selections = '';
+  // for (let i = 0; i < size; i++) {
+  // 	let index = Math.floor(Math.random() * characters.length);
+  // 	selections += characters[index];
+  // 	chars.splice(index, 1);
+  // }
+  // return selections;
 };
 /**
  * Convert callback to promise;
@@ -59,11 +59,11 @@ export const generateOTCode = (size = 6, alpha = false) => {
  * @return {String} params date
  */
 export const encrypt = (string, key) => {
-	if (string === null || typeof string === 'undefined') {
-		return string;
-	}
-	let cipher = crypto.createCipher('aes-256-cbc', key);
-	return cipher.update(string, 'utf8', 'hex') + cipher.final('hex');
+  if (string === null || typeof string === 'undefined') {
+    return string;
+  }
+  const cipher = crypto.createCipher('aes-256-cbc', key);
+  return cipher.update(string, 'utf8', 'hex') + cipher.final('hex');
 };
 
 /**
@@ -72,18 +72,18 @@ export const encrypt = (string, key) => {
  * @return {String} params date
  */
 export const decrypt = (encrypted, key) => {
-	if (encrypted === null || typeof encrypted === 'undefined') {
-		return encrypted;
-	}
-	// let key = config.get('app.superSecret');
-	let decipher = crypto.createDecipher('aes-256-cbc', key);
-	try {
-		const cip =
-			decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
-		return cip;
-	} catch (e) {
-		return encrypted;
-	}
+  if (encrypted === null || typeof encrypted === 'undefined') {
+    return encrypted;
+  }
+  // let key = config.get('app.superSecret');
+  const decipher = crypto.createDecipher('aes-256-cbc', key);
+  try {
+    const cip =
+      decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+    return cip;
+  } catch (e) {
+    return encrypted;
+  }
 };
 /**
  * convert to uppercase 1st letter
@@ -91,15 +91,15 @@ export const decrypt = (encrypted, key) => {
  * @return {Boolean} The code
  */
 export const encryptPassowrd = (value) => {
-	if (value === null || typeof value === 'undefined') {
-		return value;
-	}
-	try {
-		value = bcrypt.hashSync(value, 10);
-		return value
-	} catch (e) {
-		throw Error(e)
-	}
+  if (value === null || typeof value === 'undefined') {
+    return value;
+  }
+  try {
+    value = bcrypt.hashSync(value, 10);
+    return value;
+  } catch (e) {
+    throw Error(e);
+  }
 };
 
 /**

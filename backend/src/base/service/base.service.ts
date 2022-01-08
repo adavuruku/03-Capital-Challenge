@@ -2,11 +2,11 @@
 // import { BaseRepositoryInterface } from "../interface/base.repository.interface";
 
 // export class BaseServie{
-    
+
 //     constructor(private readonly model: Model<UserDocument>){
-//         this.model =entity; 
+//         this.model =entity;
 //     }
 
 //     protected repository: BaseRepositoryInterface<>;
-    
+
 // }

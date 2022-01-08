@@ -1,3 +1,3 @@
 export interface BaseServieInterface<T> {
-    create(data: T | any): Promise<T>;
+  create(data: T | any): Promise<T>;
 }

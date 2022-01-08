@@ -1,8 +1,9 @@
 import { Model } from 'mongoose';
 import { BaseRepositoryInterface } from './base.repository.interface';
 
-export abstract class BaseRepositoryAbstract<T> implements BaseRepositoryInterface<T> {
-
+export abstract class BaseRepositoryAbstract<T>
+  implements BaseRepositoryInterface<T>
+{
   private entity: Model<T>;
 
   protected constructor(entity: Model<T>) {
@@ -10,7 +11,6 @@ export abstract class BaseRepositoryAbstract<T> implements BaseRepositoryInterfa
   }
 
   public async create(data: T | any): Promise<T> {
-    
     return await this.entity.create(data);
   }
 
@@ -19,12 +19,12 @@ export abstract class BaseRepositoryAbstract<T> implements BaseRepositoryInterfa
   }
 
   public async findByCondition(filterCondition: any): Promise<T> {
-    console.log(filterCondition)
-    return await this.entity.findOne({...filterCondition, deleted : false});
+    console.log(filterCondition);
+    return await this.entity.findOne({ ...filterCondition, deleted: false });
   }
 
-  public async  findWithRelations(relations: any): Promise<T[]> {
-    return await this.entity.find(relations)
+  public async findWithRelations(relations: any): Promise<T[]> {
+    return await this.entity.find(relations);
   }
 
   public async findAll(): Promise<T[]> {
@@ -34,5 +34,4 @@ export abstract class BaseRepositoryAbstract<T> implements BaseRepositoryInterfa
   public async remove(id: string): Promise<T> {
     return await this.entity.findByIdAndDelete(id);
   }
-
 }

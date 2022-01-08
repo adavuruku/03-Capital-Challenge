@@ -1,24 +1,30 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { User } from '../../user/schema/user.schema';
-import { Repository } from 'typeorm';
+import { UserRepositoryInterface } from '../../user/repository/user.interface.repository';
+import configuration from "../../../config/configuration";
 @Injectable()
-export class AppJwtStrategy extends PassportStrategy(Strategy) {
+export class AppJwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
-    @InjectRepository(Enumerator)
-    private readonly enumeratorRepo: Repository<Enumerator>,
+    @Inject('UserRepositoryInterface')
+    private readonly userRepository: UserRepositoryInterface,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.AUTH_SECRET,
+      secretOrKey: configuration().app.encryption_key,
     });
   }
 
   async validate(payload: any) {
-    const user = await this.enumeratorRepo.findOne(payload.officerId);
+    const user = await this.userRepository.findOneById(payload.userId);
     if (!user) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
     }

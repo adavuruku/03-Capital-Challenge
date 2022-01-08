@@ -1,20 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Exclude, Transform,Expose } from 'class-transformer';
- 
+import { Exclude, Transform, Expose } from 'class-transformer';
+
 export type UserDocument = User & Document;
- 
+
 @Schema()
 export class User {
   @Transform(({ value }) => value.toString())
   _id: string;
- 
+
   @Prop({ unique: true, required: true })
   email: string;
- 
+
   @Prop({ required: true })
   fullName: string;
- 
+
   @Prop({ required: true })
   @Exclude()
   password: string;
@@ -31,13 +31,13 @@ export class User {
   @Exclude()
   accountVerifiedExpire: Date;
 
-  @Prop({default:false})
-  deleted : boolean
+  @Prop({ default: false })
+  deleted: boolean;
 
-  @Prop({default: Date.now})
+  @Prop({ default: Date.now })
   createdAt: Date;
 
-  @Prop({default: Date.now})
+  @Prop({ default: Date.now })
   updatedAt: Date;
 }
 

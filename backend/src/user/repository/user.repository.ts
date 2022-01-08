@@ -6,8 +6,13 @@ import { User, UserDocument } from '../schema/user.schema';
 import { UserRepositoryInterface } from './user.interface.repository';
 
 @Injectable()
-export class UserRepository extends BaseRepositoryAbstract<User> implements UserRepositoryInterface{
-  constructor(@InjectModel(User.name) private readonly model: Model<UserDocument>) {
-      super(model)
+export class UserRepository
+  extends BaseRepositoryAbstract<User>
+  implements UserRepositoryInterface
+{
+  constructor(
+    @InjectModel(User.name) private readonly model: Model<UserDocument>,
+  ) {
+    super(model);
   }
 }

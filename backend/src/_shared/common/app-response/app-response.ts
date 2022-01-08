@@ -2,6 +2,7 @@
  * The AppResponse class
  */
 import { HttpStatus } from '@nestjs/common';
+import { ResponseOption } from './response-option';
 
 export class AppResponse {
   /**
@@ -10,6 +11,14 @@ export class AppResponse {
    */
   static getSuccessMeta(success = true) {
     return { statusCode: HttpStatus.OK, success };
+  }
+
+  /**
+   * @param {Object} success the meta object
+   * @return {Object} The success response object
+   */
+  static getHttpMeta(success: boolean, status: HttpStatus) {
+    return { statusCode: status, success };
   }
 
   /**
@@ -24,5 +33,24 @@ export class AppResponse {
       response.data = data;
     }
     return response;
+  }
+  /**
+   * @param {ResponseOption} option: required email for search
+   * @return {Object} The formatted response
+   */
+  static async getResponse(option: ResponseOption) {
+    try {
+      const meta: any = AppResponse.getHttpMeta(option.success, option.code);
+      if (option.token) {
+        meta.token = option.token;
+      }
+      Object.assign(meta, { statusCode: option.code });
+      if (option.message) {
+        meta.message = option.message;
+      }
+      return AppResponse.format(meta, option.value);
+    } catch (e) {
+      throw e;
+    }
   }
 }
