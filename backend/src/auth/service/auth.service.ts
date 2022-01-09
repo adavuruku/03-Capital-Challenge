@@ -7,6 +7,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UserRepositoryInterface } from '../../user/repository/user.interface.repository';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -14,6 +15,7 @@ export class AuthService {
     @Inject('UserRepositoryInterface')
     private readonly userRepository: UserRepositoryInterface,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   public async validateUser(email: string, password: string): Promise<any> {
@@ -47,5 +49,15 @@ export class AuthService {
    */
   public generateToken(user: any): string {
     return this.jwtService.sign(user);
+  }
+  /**
+   * @param {Object} user required user login payload
+   * @return {String} jwt token
+   */
+  public getCookieWithJwtToken(user: any) {
+    const token = this.jwtService.sign(user);
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'app.jwt_expiration',
+    )}`;
   }
 }

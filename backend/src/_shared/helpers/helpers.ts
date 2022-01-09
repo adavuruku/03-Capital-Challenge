@@ -1,13 +1,13 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import * as bcrypt from 'bcrypt';
-
+import * as _ from 'lodash';
 import * as randomstring from 'randomstring';
-// import * as sgMail from '@sendgrid/mail/index';
-// const dayjs = require('dayjs');
-// let timezone = require('dayjs/plugin/timezone');
-// dayjs.extend(timezone);
-// dayjs.tz.setDefault('Africa/Lagos');
+import * as sgMail from '@sendgrid/mail/index';
+import * as dayjs from 'dayjs';
+import * as timezone from 'dayjs/plugin/timezone';
+dayjs.extend(timezone);
+dayjs.tz.setDefault('Africa/Lagos');
 
 /**
  * Convert callback to promise;
@@ -29,11 +29,25 @@ import * as randomstring from 'randomstring';
  * @param {Number} size Hour count
  * @return {Date} The date
  */
-export const addHourToDate = (size) => {
-  const date = new Date();
-  const hours = date.getHours() + 1;
-  date.setHours(hours);
-  return date;
+export const addTimeToDate = (size, time) => {
+  // const date = new Date();
+  // const hours = date.getHours() + 1;
+  // date.setHours(hours);
+  const expiryTime = dayjs().add(size, time);
+  return expiryTime;
+};
+
+/**
+ * @param {Number} size Hour count
+ * @return {Date} The date
+ */
+export const verifyDateExpiry = (incomingDate) => {
+  // const date = new Date();
+  // const hours = date.getHours() + 1;
+  // date.setHours(hours);
+  const expectedExpiry = dayjs(incomingDate).toString(); //12:00 + 1 : 01:00
+  const currentTime = dayjs().toString(); // 12:10 + 1 > 1:10
+  return currentTime <= expectedExpiry; //1>=1:10
 };
 
 /**
@@ -43,47 +57,6 @@ export const addHourToDate = (size) => {
  */
 export const generateOTCode = (size = 6, alpha = false) => {
   return randomstring.generate(size);
-  // let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
-  // const chars = characters.split('');
-  // let selections = '';
-  // for (let i = 0; i < size; i++) {
-  // 	let index = Math.floor(Math.random() * characters.length);
-  // 	selections += characters[index];
-  // 	chars.splice(index, 1);
-  // }
-  // return selections;
-};
-/**
- * Convert callback to promise;
- *  @param {String} string
- * @return {String} params date
- */
-export const encrypt = (string, key) => {
-  if (string === null || typeof string === 'undefined') {
-    return string;
-  }
-  const cipher = crypto.createCipher('aes-256-cbc', key);
-  return cipher.update(string, 'utf8', 'hex') + cipher.final('hex');
-};
-
-/**
- * Convert callback to promise;
- *  @param {String} encrypted
- * @return {String} params date
- */
-export const decrypt = (encrypted, key) => {
-  if (encrypted === null || typeof encrypted === 'undefined') {
-    return encrypted;
-  }
-  // let key = config.get('app.superSecret');
-  const decipher = crypto.createDecipher('aes-256-cbc', key);
-  try {
-    const cip =
-      decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
-    return cip;
-  } catch (e) {
-    return encrypted;
-  }
 };
 /**
  * convert to uppercase 1st letter
@@ -101,11 +74,41 @@ export const encryptPassowrd = (value) => {
     throw Error(e);
   }
 };
-
-// /**
-//  * @return {String}
-//  */
-// export const getTodayDateTimeStamp = () => {
-// 	let todayDate = dayjs().format('YYYY-MM-DD').toString();
-// 	return todayDate;
-// };
+export const recursivelyCleanMongooseDocument = (value: any) => {
+  const cleanValue = [
+    'password',
+    'accountVerifiedExpire',
+    'verificationCode',
+    'accountVerified',
+    '__v',
+    'deleted',
+  ];
+  if (Array.isArray(value)) {
+    return value.map(recursivelyCleanMongooseDocument);
+  }
+  // if (value !== null && typeof value === 'object') {
+  //   return Object.fromEntries(
+  //     Object.entries(value).map(([key, value]) => [
+  //       key,
+  //       recursivelyCleanMongooseDocument(value),
+  //     ]),
+  //   );
+  // }
+  if (value !== null) {
+    console.log(value, cleanValue);
+    const newVal = _.omit({ ...value }, cleanValue);
+    const newyVal = _.omit(
+      { _id: 'dss', name: 'dsdsd', deleted: 'deee' },
+      cleanValue,
+    );
+    console.log(newVal, newyVal);
+    return newVal;
+  }
+};
+/**
+ * @return {String}
+ */
+export const getTodayDateTimeStamp = () => {
+  const todayDate = dayjs().format('YYYY-MM-DD').toString();
+  return todayDate;
+};

@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { Exclude, Transform, Expose } from 'class-transformer';
+import { Exclude, Transform, Expose, Type } from 'class-transformer';
+import * as mongoose from 'mongoose';
+import { User } from '../../user/schema/user.schema';
 
 export type ContactDocument = Contact & Document;
 
@@ -9,27 +11,19 @@ export class Contact {
   @Transform(({ value }) => value.toString())
   _id: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ required: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, minlength: 3 })
   fullName: string;
 
-  @Prop({ required: true })
-  @Exclude()
-  password: string;
+  @Prop({ required: true, minlength: 11 })
+  phoneNumber: string;
 
-  @Prop({ required: true })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: User.name })
+  @Type(() => User)
   @Exclude()
-  verificationCode: string;
-
-  @Prop({ default: false })
-  @Exclude()
-  accountVerified: boolean;
-
-  @Prop({ required: true })
-  @Exclude()
-  accountVerifiedExpire: Date;
+  user: User;
 
   @Prop({ default: false })
   deleted: boolean;

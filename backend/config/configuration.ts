@@ -3,11 +3,12 @@ export default () => ({
     environment: process.env.NODE_ENV || 'development',
     encryption_key: process.env.SERVER_SECRET || 'AppSecret',
     name: process.env.APP_NAME || '03 Capital',
+    jwt_expiration: process.env.JWT_EXPIRATION,
     baseUrl: `http://localhost:${process.env.PORT || 7000}`,
   },
   service: {
     serviceName: process.env.SERVICE_NAME || 'App Service',
-    enableSwagger: true,
+    enableSwagger: process.env.ENABLE_SAWAGGER,
     port: process.env.PORT || 7000,
     host: process.env.HOST,
     version: 1,
@@ -32,7 +33,7 @@ export default () => ({
     },
     mailOptions: {
       from: process.env.VERIFY_ACCOUNT_FROM_EMAIL,
-      verifyLink: process.env.VERIFY_ACCOUNT_LINK
+      verifyLink: process.env.VERIFY_ACCOUNT_LINK,
     },
     emailTemplates: {
       verify_account: 'confirm-account-email-template',

@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { NextFunction } from 'express';
-import { AppResponse } from './_shared/common';
+import { AppResponse } from './_shared/app-response/app-response';
 import { UserLoginDto } from './user/dtos/user-login-dto';
 import { AppLocalGuard } from './auth/guards/app-local-guard';
 import { AuthService } from './auth/service/auth.service';
@@ -39,12 +39,14 @@ export class AppController {
     try {
       const user = req.user;
       const token = this.authService.generateToken(user);
+      const cookie = this.authService.getCookieWithJwtToken(user);
       const response = await AppResponse.getResponse({
         code: HttpStatus.OK,
         message: 'Login Successfully',
         value: user,
         token: token,
       });
+      res.setHeader('Set-Cookie', cookie);
       return res.status(HttpStatus.OK).json(response);
     } catch (err) {
       next(err);

@@ -1,8 +1,7 @@
 import { Contact } from '../schema/contact.schema';
-import { EmailOption } from '../../interphases/email-option';
-import { SearchRespose } from '../../interphases/search-response';
-import { CreateContactDto } from "../dtos/create-contact.dto";
+import { BaseServiceInterface } from '../../base/service/base.service.interface';
 
-export interface ContactServiceInterface {
-  create(contactDto: CreateContactDto): Promise<Contact>;
+export interface ContactServiceInterface extends BaseServiceInterface<Contact> {
+  findAll(searchCondition: any, page?: number): Promise<any>;
+  softDelete(searchCondition: any, page?: number): Promise<any>;
 }

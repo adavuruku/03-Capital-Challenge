@@ -10,7 +10,7 @@ import { ContactRepository } from './repository/contact.repository';
   ],
   providers: [
     {
-      provide: 'ContactRepositoryInterface',
+      provide: 'ContactInterfaceRepository',
       useClass: ContactRepository,
     },
     {

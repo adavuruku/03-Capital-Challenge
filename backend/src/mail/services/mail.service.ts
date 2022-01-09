@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { EmailOptions, MailgunService } from '@nextnm/nestjs-mailgun';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
-import configuration from '../../config/configuration';
+import configuration from '../../../config/configuration';
 
 @Injectable()
 export class MailerService {

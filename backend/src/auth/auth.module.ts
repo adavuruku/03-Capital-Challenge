@@ -6,16 +6,21 @@ import { AppJwtStrategy } from './strategy/app-jwt-strategy';
 import { AuthService } from './service/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import configuration from '../../config/configuration';
+import { ConfigModule, ConfigService } from "@nestjs/config";
 
 @Module({
   imports: [
     UserModule,
-    JwtModule.register({
-      secret: configuration().app.encryption_key,
-      signOptions: {
-        expiresIn: '360s',
-      },
-      privateKey: configuration().app.encryption_key,
+    ConfigModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('app.encryption_key'),
+        signOptions: {
+          expiresIn: `${configService.get('app.jwt_expiration')}s`,
+        },
+      }),
     }),
   ],
   providers: [AuthService, AppLocalStrategy, AppJwtStrategy],
