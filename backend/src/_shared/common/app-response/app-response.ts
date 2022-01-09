@@ -2,17 +2,9 @@
  * The AppResponse class
  */
 import { HttpStatus } from '@nestjs/common';
-import { ResponseOption } from './response-option';
-
+import { ResponseOption } from '../../../interphases/response-option';
+import * as _ from 'lodash';
 export class AppResponse {
-  /**
-   * @param {Object} success the meta object
-   * @return {Object} The success response object
-   */
-  static getSuccessMeta(success = true) {
-    return { statusCode: HttpStatus.OK, success };
-  }
-
   /**
    * @param {Object} success the meta object
    * @return {Object} The success response object
@@ -32,6 +24,7 @@ export class AppResponse {
     if (data) {
       response.data = data;
     }
+    console.log('response res', response);
     return response;
   }
   /**
@@ -48,7 +41,13 @@ export class AppResponse {
       if (option.message) {
         meta.message = option.message;
       }
-      return AppResponse.format(meta, option.value);
+      const useData = _.omit(option.value, [
+        'password',
+        'accountVerifiedExpire',
+        'verificationCode',
+        'accountVerified',
+      ]);
+      return AppResponse.format(meta, useData);
     } catch (e) {
       throw e;
     }

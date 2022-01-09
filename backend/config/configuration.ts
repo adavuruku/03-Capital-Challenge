@@ -21,6 +21,21 @@ export default () => ({
         production: process.env.DB_TEST_URL,
       },
     },
-    emailTemplates: {},
+    mailgun: {
+      api_key: process.env.MAILGUN_API_KEY,
+      host: process.env.MAILGUN_HOST,
+      domain: process.env.MAILGUN_DOMAIN,
+      username: process.env.MAILGUN_USERNAME,
+    },
+    sendGrid: {
+      api_key: process.env.SENDGRID_API_KEY,
+    },
+    mailOptions: {
+      from: process.env.VERIFY_ACCOUNT_FROM_EMAIL,
+      verifyLink: process.env.VERIFY_ACCOUNT_LINK
+    },
+    emailTemplates: {
+      verify_account: 'confirm-account-email-template',
+    },
   },
 });

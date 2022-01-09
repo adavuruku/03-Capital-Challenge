@@ -1,9 +1,9 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import * as bcrypt from 'bcrypt';
-// import ejs from 'ejs';
-import * as randomstring from 'randomstring';
 
+import * as randomstring from 'randomstring';
+// import * as sgMail from '@sendgrid/mail/index';
 // const dayjs = require('dayjs');
 // let timezone = require('dayjs/plugin/timezone');
 // dayjs.extend(timezone);
@@ -101,34 +101,6 @@ export const encryptPassowrd = (value) => {
     throw Error(e);
   }
 };
-
-/**
- * convert to uppercase 1st letter
- * @param {Object} content
- * @param {String} templateValue
- * @return {Boolean} The code
- */
-// export function getHtmlFromEmailTemplate(content, templateValue) {
-// 	try {
-// 		const template = `./templates/emails/${templateValue}.ejs`;
-// 		console.log('templateValue : ', templateValue);
-// 		console.log('template :', template);
-// 		return new Promise((resolve, reject) => {
-// 			fs.readFile(template, 'utf8', (err, file) => {
-// 				if (err) {
-// 					throw err;
-// 				}
-// 				const html = ejs.render(file, {
-// 					...content
-// 				});
-// 				return resolve(html);
-// 			});
-// 		});
-// 	} catch (e) {
-// 		console.log('email :::: ', e);
-// 		throw e;
-// 	}
-// }
 
 // /**
 //  * @return {String}

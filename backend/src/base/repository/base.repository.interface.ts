@@ -10,4 +10,6 @@ export interface BaseRepositoryInterface<T> {
   remove(id: string): Promise<T>;
 
   findWithRelations(relations: any): Promise<T[]>;
+
+  updateOneRecord(id: string, relations: any): Promise<T>;
 }

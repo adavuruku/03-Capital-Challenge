@@ -27,6 +27,13 @@ export abstract class BaseRepositoryAbstract<T>
     return await this.entity.find(relations);
   }
 
+  public async updateOneRecord(id: string, relations: any): Promise<T> {
+    return await this.entity.findByIdAndUpdate(
+      id,
+      { ...relations },
+      { new: true },
+    );
+  }
   public async findAll(): Promise<T[]> {
     return await this.entity.find().exec();
   }
