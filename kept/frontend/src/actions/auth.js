@@ -47,10 +47,6 @@ export const register = ({name, email, password}) => async dispatch => {
       dispatch(loadUser()) //this will help set the headers down
   } catch (error) {
       dispatch(setAlert('Email Already Exist','danger'))
-    //   const errors = error.response.data.errors
-    //   if(errors){
-    //       errors.forEach(error=>dispatch(setAlert(error.msg, 'danger')))
-    //   }
     dispatch({
         type:REGISTER_FAIL
     })

@@ -7,20 +7,8 @@ import * as _ from 'lodash';
 import { ContactInterfaceRepository } from '../repository/contact.interface.repository';
 import { ContactServiceInterface } from './contact.service.interface';
 import { CreateContactDto } from '../dtos/create-contact.dto';
-import { Contact } from '../schema/contact.schema';
-import { CreateUserDto } from '../../user/dtos/create-user.dto';
 import { SearchRespose } from '../../interphases/search-response';
-import {
-  addHourToDate,
-  encryptPassowrd,
-  generateOTCode,
-} from '../../_shared/helpers/helpers';
-import { validate } from 'class-validator';
-import {
-  instanceToPlain,
-  plainToClass,
-  plainToInstance,
-} from 'class-transformer';
+
 
 @Injectable()
 export class ContactService implements ContactServiceInterface {

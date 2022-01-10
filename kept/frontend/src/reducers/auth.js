@@ -21,7 +21,6 @@ function authReducer(state = initialState, action) {
       return {
         ...state, ...payload, isAuthenticated:true, loading:false
       }
-      
     case REGISTER_FAIL:
     case AUTH_ERROR:
     case LOGIN_FAIL:

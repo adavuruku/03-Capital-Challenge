@@ -1,36 +1,38 @@
 import React, { Fragment, useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
-import PropTypes from 'prop-types'; //an npm package to validate the prop types send to this component
+import PropTypes from 'prop-types';
+import {createUserStart} from "../../saga/action/userAction";
+import {setAlert} from "../../saga/action/alertAction"
 
-const Register = ({ setAlert, register, isAuthenticated}) => {
+const Register = ({ isAuthenticated}) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
     email: '',
     password: '',
     password2: ''
   });
 
-  const { name, email, password, password2 } = formData;
+  const { fullName, email, password, password2 } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (email.length <= 0 || name.length <= 0 || password2.length <= 0 || password.length <= 0) {
-      setAlert('Passwords do not match', 'danger');
+    console.log(fullName, email, password, password2 )
+    if (email.length <= 0 || fullName.length <= 0 || password2.length <= 0 || password.length <= 0) {
+      dispatch(setAlert({msg:'Invalid Data Input', alertType: 'danger'}));
     } else if(password !== password2){
-      setAlert('Invalid Data Input', 'danger');
+      dispatch(setAlert({msg: 'Passwords do not match', alertType: 'danger'}));
     }else{
-      register({ name, email, password });
+      createUserStart({ fullName, email, password })
     }
   };
 //redirrect to Dashboard if user is in
 if(isAuthenticated){
-  return <Redirect to="/dashboard"/>
+  return <Redirect to="/dashboard" replace={true}/>
 }
   return (
     <Fragment>
@@ -42,11 +44,14 @@ if(isAuthenticated){
         <div className="form-group">
           <input
             type="text"
-            placeholder="Name"
-            name="name"
-            value={name}
+            placeholder="Full Name "
+            name="fullName"
+            value={fullName}
             onChange={onChange}
           />
+          <small className="form-text">
+            Please enter your full name (first name middle name last name).
+          </small>
         </div>
         <div className="form-group">
           <input
@@ -57,8 +62,7 @@ if(isAuthenticated){
             onChange={onChange}
           />
           <small className="form-text">
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
+            Please enter a valid email address.
           </small>
         </div>
         <div className="form-group">
@@ -69,6 +73,9 @@ if(isAuthenticated){
             value={password}
             onChange={onChange}
           />
+          <small className="form-text">
+            Please enter your password.
+          </small>
         </div>
         <div className="form-group">
           <input
@@ -78,6 +85,9 @@ if(isAuthenticated){
             value={password2}
             onChange={onChange}
           />
+          <small className="form-text">
+            Please re-enter your password (6) character long.
+          </small>
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
       </form>
@@ -90,32 +100,11 @@ if(isAuthenticated){
 
 //define the compoment proptypes
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired,
+  // setAlert: PropTypes.func.isRequired,
+  // createUserStart: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 };
-
-
-//connect will connect the component to the react store
-// {setAlert} tells redux the actions to the component
-// also it will add the actions to the props of this component
-//syntax is connect(mapStateToProps, actions)
-//note that both connect parameter are optional ->
-// action define list of action(redux action) you want to use on the component
-//mapStateToprops define the data on the staore u want the component to listen to its change
-
-//mapsatae to props has two argument state, ownProps(optional) -> state is the entire content in the store -> ownProps are the properties of the 
-//componet that wrap the state or in the connect
-//mapStateToProps describe the data in the react store that can change the state of this component - the syntax
-/**
- * function mapStateToProps(state) {
-  const { todos } = state
-  return { todoList: todos.allIds }
-}
-
-export default connect(mapStateToProps)(TodoList)
- */
 let mapStateToProps = state =>({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated
 })
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps )(Register);

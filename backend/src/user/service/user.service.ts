@@ -12,9 +12,10 @@ import * as crypto from 'crypto';
 import { UserServiceInterface } from './user.interface.service';
 import {
   generateOTCode,
-  addHourToDate,
-  encryptPassowrd, addTimeToDate, verifyDateExpiry
-} from "../../_shared/helpers/helpers";
+  encryptPassowrd,
+  addTimeToDate,
+  verifyDateExpiry,
+} from '../../_shared/helpers/helpers';
 import * as _ from 'lodash';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '../../mail/services/mail.service';
@@ -57,7 +58,7 @@ export class UserService implements UserServiceInterface {
         verifyLink: configuration().service.mailOptions.verifyLink,
         verificationCode: value.verificationCode,
       };
-      await this.sendEmail(emailOption);
+      // await this.sendEmail(emailOption);
       return { value: value, meta: existUser };
     } catch (e) {
       throw new InternalServerErrorException(e);

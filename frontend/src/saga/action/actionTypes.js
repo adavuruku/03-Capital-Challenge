@@ -1,0 +1,40 @@
+export const  SET_ALERT_ACTION = 'SET_ALERT_ACTION'
+export const  REMOVE_ALERT_ACTION = 'REMOVE_ALERT_ACTION'
+
+export const  SET_ALERT = 'SET_ALERT'
+export const  REMOVE_ALERT = 'REMOVE_ALERT'
+
+//reducers for registration
+
+export const  REGISTER_USER = 'REGISTER_USER'
+export const  REGISTER_SUCCESS_ACTION = 'REGISTER_SUCCESS_ACTION'
+export const  REGISTER_FAIL_ACTION = 'REGISTER_FAIL_ACTION'
+export const  LOGIN_FAIL_ACTION = 'LOGIN_FAIL_ACTION'
+export const  LOGIN_SUCCESS_ACTION = 'LOGIN_SUCCESS_ACTION'
+
+export const  REGISTER_SUCCESS = 'REGISTER_SUCCESS'
+
+export const  LOGIN_FAIL = 'LOGIN_FAIL'
+export const  LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+
+
+export const  AUTH_ERROR = 'AUTH_ERROR'
+
+//Contact reducers
+export const DELETED_CONTACT_ACTION = 'DELETED_CONTACT_ACTION'
+export const ADD_CONTACT_ACTION = 'ADD_CONTACT_ACTION'
+export const ALL_CONTACT_ACTION = 'ALL_CONTACT_ACTION'
+// contact saga
+export const ADD_CONTACT = 'ADD_CONTACT'
+export const ALL_CONTACT = 'ALL_CONTACT'
+export const DELETED_CONTACT = 'DELETED_CONTACT'
+
+export const  LOGOUT = 'LOGOUT'
+export const  LOGOUT_START = 'LOGOUT_START'
+
+export const  GET_PROFILE = 'GET_PROFILE'
+export const  PROFILE_ERROR = 'PROFILE_ERROR'
+export const  CLEAR_PROFILE = 'CLEAR_PROFILE'
+export const  USER_LOADED = 'USER_LOADED'
+
+export const NO_CONTACT = 'NO_CONTACT'
