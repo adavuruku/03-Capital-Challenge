@@ -1,18 +1,15 @@
 import React, {Fragment, useEffect} from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
+import setAuthToken from './saga/api/setAuthToken'
 import Landing from './components/layout/Landing'
 import Navbar from './components/layout/Navbar'
 // import { loadUser } from "./actions/auth";
 import Routes from "./components/routing/Routes";
 
-import {store} from './store'
-
-
-
-// if(localStorage.token){
-//   setAuthToken(localStorage.token)
-// }
+if(localStorage.token){
+  setAuthToken(localStorage.token)
+}
 const  App= ()=> {
   
   // useEffect(()=>{

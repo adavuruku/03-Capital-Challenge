@@ -25,15 +25,8 @@ import {
 import { NextFunction } from 'express';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UserServiceInterface } from '../service/user.interface.service';
-import { UserService } from '../service/user.service';
 import { AppResponse } from '../../_shared/app-response/app-response';
-import { UserLoginDto } from '../dtos/user-login-dto';
-import { AppLocalGuard } from '../../auth/guards/app-local-guard';
-import { MailerService } from '../../mail/services/mail.service';
-import { MailSendgridService } from '../../mail/services/mail.sendgrid.service';
-import configuration from '../../../config/configuration';
 import { VerifyAccountDto } from '../dtos/verify-account.dto';
-import MongooseClassSerializerInterceptor from '../../_shared/interceptors/mongooseClassSerializer.interceptors';
 import { User } from '../schema/user.schema';
 
 @ApiTags('User')

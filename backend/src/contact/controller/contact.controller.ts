@@ -80,7 +80,7 @@ export class ContactController {
     }
   }
 
-  @ApiOperation({ summary: 'Create Contact' })
+  @ApiOperation({ summary: 'Contact List' })
   @Get('/list/:page')
   @HttpCode(HttpStatus.OK)
   async find(
@@ -100,7 +100,7 @@ export class ContactController {
       const response = await AppResponse.getResponse({
         code: HttpStatus.OK,
         success: true,
-        message: 'Your Contact Lit',
+        message: 'Your Contact List',
         value: value,
       });
       return res.status(HttpStatus.OK).json(response);
@@ -119,7 +119,11 @@ export class ContactController {
     @Param('id') id: string,
   ) {
     try {
-      const searchCondition = { user: req.user.userId, _id: id, deleted: false };
+      const searchCondition = {
+        user: req.user.userId,
+        _id: id,
+        deleted: false,
+      };
       const { value, meta } = await this.contactService.softDelete(
         searchCondition,
       );

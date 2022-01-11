@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as SendGrid from '@sendgrid/mail';
-import configuration from "../../../config/configuration";
+// import configuration from '../../../config/configuration';
 
 @Injectable()
 export class MailSendgridService {
@@ -21,7 +21,7 @@ export class MailSendgridService {
     const transport = await SendGrid.send(mail);
     // avoid this on production. use log instead :)
     console.log(`E-Mail sent to ${mail.to}`);
-    // console.log(`E-Mail sent to ${mail.to}`, transport);
+    console.log(`E-Mail sent to ${mail.to}`, transport);
     return transport;
   }
 }

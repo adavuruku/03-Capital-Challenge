@@ -46,12 +46,17 @@ async function bootstrap() {
       .build();
     const document = SwaggerModule.createDocument(app, options);
     SwaggerModule.setup('api', app, document);
+
   }
 
   await app.listen(config.get('service.port'), () =>
     Logger.log(
       `App Service is listening at port ${config.get('service.port')} ...`,
     ),
+  );
+  console.log(
+    'You can open the swagger documentation here :',
+    `${config.get('app.baseUrl')}/api`,
   );
   // FZg6CHUf8t
   // 15b20fff8b2e486461594aaa639533b3

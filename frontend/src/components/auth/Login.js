@@ -2,8 +2,11 @@ import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {loginStart} from "../../saga/action/userAction";
+import {setAlert} from "../../saga/action/alertAction";
+import {v4 as uuidv4} from "uuid";
 
-const Login = ({ isAuthenticated }) => {
+const Login = ({ isAuthenticated, setAlert, loginStart }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -17,15 +20,15 @@ const Login = ({ isAuthenticated }) => {
   const onSubmit = e => {
     e.preventDefault();
     if(email.length <=0 || password.length <=0){
-      // setAlert('Invalid Email / Password','danger')
+      setAlert({msg:'Invalid Input Verify', id: uuidv4(), alertType: 'danger'})
     }else{
-      // login({email, password});
+      loginStart({email, password});
     }
   };
   //redirrect of login
   console.log(isAuthenticated)
   if(isAuthenticated){
-    //  return <Redirect to="/dashboard" replace={true}/>
+     return <Redirect to="/dashboard" replace={true}/>
   }
  
   return (
@@ -64,12 +67,12 @@ const Login = ({ isAuthenticated }) => {
   );
 };
 Login.propTypes = {
-  // login:PropTypes.func.isRequired,
-  // setAlert:PropTypes.func.isRequired,
+  loginStart:PropTypes.func.isRequired,
+  setAlert:PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool
 }
 let mapStateToProps = state =>({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated
 })
 // export default Login 
-export default connect(mapStateToProps, { })(Login);
+export default connect(mapStateToProps, { loginStart, setAlert })(Login);

@@ -3,11 +3,9 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UserRepositoryInterface } from '../repository/user.interface.repository';
-import { User } from '../schema/user.schema';
 import * as crypto from 'crypto';
 import { UserServiceInterface } from './user.interface.service';
 import {
@@ -17,18 +15,12 @@ import {
   verifyDateExpiry,
 } from '../../_shared/helpers/helpers';
 import * as _ from 'lodash';
-import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '../../mail/services/mail.service';
 import { MailSendgridService } from '../../mail/services/mail.sendgrid.service';
-import AuthEmail from '../../_shared/helpers/AuthEmail';
 import { VerifyAccountDto } from '../dtos/verify-account.dto';
 import { SearchRespose } from '../../interphases/search-response';
 import { EmailOption } from '../../interphases/email-option';
-import { AuthService } from '../../auth/service/auth.service';
-import configuration from '../../../config/configuration';
 import { ConfigService } from '@nestjs/config';
-// import AuthEmail from 'src/_shared/helpers/AuthEmail';
-
 @Injectable()
 export class UserService implements UserServiceInterface {
   constructor(
@@ -54,11 +46,11 @@ export class UserService implements UserServiceInterface {
       const emailOption = {
         to: value.email,
         subject: '03 Capital (Contact App) - Verify Account',
-        from: configuration().service.mailOptions.from,
-        verifyLink: configuration().service.mailOptions.verifyLink,
+        from: this.configService.get('service.mailOptions.from'),
+        verifyLink: this.configService.get('service.mailOptions.verifyLink'),
         verificationCode: value.verificationCode,
       };
-      // await this.sendEmail(emailOption);
+      await this.sendEmail(emailOption);
       return { value: value, meta: existUser };
     } catch (e) {
       throw new InternalServerErrorException(e);
@@ -156,7 +148,7 @@ export class UserService implements UserServiceInterface {
         accountVerified: false,
       });
       if (userExist && userExist !== null) {
-        if (verifyDateExpiry(userExist.accountVerifiedExpire)) {
+        if (verifyDateExpiry(userExist.accountVerifiedExpire, 1, 'hour')) {
           return {
             message: 'Account Verification Failed.',
             validate: false,
@@ -164,7 +156,7 @@ export class UserService implements UserServiceInterface {
         }
         if (!userExist.verificationCode) {
           return {
-            message: 'Account Verification Failed yyy.',
+            message: 'Account Verification Failed.',
             validate: false,
           };
         }
@@ -174,7 +166,7 @@ export class UserService implements UserServiceInterface {
           .digest('hex');
         if (userHash !== verifyDto.verificationCode) {
           return {
-            message: 'Account Verification Failed ooo.',
+            message: 'Account Verification Failed.',
             validate: false,
           };
         }
@@ -199,27 +191,4 @@ export class UserService implements UserServiceInterface {
       throw new InternalServerErrorException(e);
     }
   }
-
-  /*async findAll(): Promise<User[]> {
-    return await this.model.find().exec();
-  }
-
-  async findOne(id: string): Promise<User> {
-    return await this.model.findById(id).exec();
-  }
-
-  async create(createTodoDto: CreateTodoDto): Promise<User> {
-    return await new this.model({
-      ...createTodoDto,
-      createdAt: new Date(),
-    }).save();
-  }
-
-  async update(id: string, updateTodoDto: UpdateTodoDto): Promise<User> {
-    return await this.model.findByIdAndUpdate(id, updateTodoDto).exec();
-  }
-
-  async delete(id: string): Promise<User> {
-    return await this.model.findByIdAndDelete(id).exec();
-  }*/
 }

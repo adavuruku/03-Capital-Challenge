@@ -55,11 +55,15 @@ export class AppResponse {
       if (option.value) {
         if (_.isArray(option.value)) {
           useData = await option.value.map((ele) => {
-            return _.omit(ele._doc, cleanValue);
+            return ele._doc
+              ? _.omit(ele._doc, cleanValue)
+              : _.omit(ele, cleanValue);
           });
         }
         if (_.isObjectLike(option.value) && !_.isArray(option.value)) {
-          useData = _.omit(option.value._doc, cleanValue);
+          useData = option.value._doc
+            ? _.omit(option.value._doc, cleanValue)
+            : _.omit(option.value, cleanValue);
         }
       }
       return AppResponse.format(meta, useData);

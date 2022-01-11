@@ -6,7 +6,7 @@ import { AppJwtStrategy } from './strategy/app-jwt-strategy';
 import { AuthService } from './service/auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import configuration from '../../config/configuration';
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [

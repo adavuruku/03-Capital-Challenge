@@ -9,7 +9,6 @@ import { ContactServiceInterface } from './contact.service.interface';
 import { CreateContactDto } from '../dtos/create-contact.dto';
 import { SearchRespose } from '../../interphases/search-response';
 
-
 @Injectable()
 export class ContactService implements ContactServiceInterface {
   constructor(

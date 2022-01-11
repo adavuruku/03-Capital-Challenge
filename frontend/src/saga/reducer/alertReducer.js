@@ -6,7 +6,6 @@ const initialState = [];
 
 function alertReducer(state = initialState, action) {
     const { type, payload } = action;
-    console.log(payload)
     switch (type) {
         case SET_ALERT:
             return [...state, payload];

@@ -5,11 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schema/user.schema';
 import { UserRepository } from './repository/user.repository';
 import { MailerModule } from '../mail/mail.module';
+import { ConfigModule } from '@nestjs/config';
 console.log('env USER :', process.env.SERVER_SECRET);
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     MailerModule,
+    ConfigModule,
   ],
   providers: [
     {

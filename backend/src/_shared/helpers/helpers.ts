@@ -41,13 +41,9 @@ export const addTimeToDate = (size, time) => {
  * @param {Number} size Hour count
  * @return {Date} The date
  */
-export const verifyDateExpiry = (incomingDate) => {
-  // const date = new Date();
-  // const hours = date.getHours() + 1;
-  // date.setHours(hours);
+export const verifyDateExpiry = (incomingDate, maxDiff, scale) => {
   const expectedExpiry = dayjs(incomingDate).toString(); //12:00 + 1 : 01:00
-  const currentTime = dayjs().toString(); // 12:10 + 1 > 1:10
-  return currentTime <= expectedExpiry; //1>=1:10
+  return dayjs().diff(expectedExpiry, scale) > maxDiff;
 };
 
 /**

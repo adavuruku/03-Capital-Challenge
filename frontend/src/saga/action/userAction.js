@@ -8,6 +8,16 @@ export function createUserStart(createUserPayload) {
     return { type: types.REGISTER_USER, payload: createUserPayload };
 }
 
+export function loginStart(loginPayload) {
+    return { type: types.LOGIN_START, payload: loginPayload };
+}
+export function loginSucceed(loginPayload) {
+    return { type: types.LOGIN_SUCCESS, payload: loginPayload };
+}
+export function loginFail() {
+    return { type: types.LOGIN_FAIL };
+}
+
 //logout actions
 export function logOutComplete() {
     return { type: types.LOGOUT };
@@ -20,6 +30,9 @@ export function loginSuccess(createUserPayload) {
     return { type: types.LOGIN_SUCCESS_ACTION, payload: createUserPayload };
 }
 
-export function loginFailed(errorPayload) {
-    return { type: types.LOGIN_FAIL_ACTION, payload: errorPayload };
+export function emailVerificationCompleted(payload) {
+    return { type: types.EMAIL_VERIFICATION_COMPLETED, payload: payload };
+}
+export function startEmailVerification(payload) {
+    return { type: types.EMAIL_VERIFICATION_START, payload: payload };
 }

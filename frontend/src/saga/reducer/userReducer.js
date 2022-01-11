@@ -1,37 +1,40 @@
 import { REGISTER_SUCCESS_ACTION,
-    USER_LOADED, AUTH_ERROR,
     LOGIN_SUCCESS, LOGIN_FAIL,LOGOUT } from '../action/actionTypes';
-
+import { REHYDRATE } from 'redux-persist/lib/constants';
 // reducers define the content in the redux stores
 // more of a table in the db(store)
 const initialState = {
-    token:null,
+    meta:null,
+    isRegister:false,
     isAuthenticated:false,
     loading:true,
-    user:null
+    data:null
 };
 
 function userReducer(state = initialState, action) {
     const { type, payload } = action;
-    console.log('USER ', payload)
     switch (type) {
         case REGISTER_SUCCESS_ACTION:
-        case LOGIN_SUCCESS:
-            // localStorage.setItem('token',payload.token)
-            console.log('after reg : ',...payload)
             return {
-                ...state, ...payload, isAuthenticated:true, loading:false
+                ...state, ...payload, isAuthenticated:false, isRegister:true, loading:false
+            }
+        case LOGIN_SUCCESS:
+            localStorage.setItem('token',payload.meta.token)
+            return {
+                ...state, data: payload.data, isAuthenticated:true, isRegister:false, loading:false
             }
         case LOGIN_FAIL:
         case LOGOUT:
             localStorage.removeItem('token')
             return {
-                ...state, token:null, user:null, isAuthenticated:false, loading:false
+                ...state, token:null, data:null, isAuthenticated:false, isRegister:false, loading:false
             }
-        case USER_LOADED:
-            return {
-                ...state, isAuthenticated:true, loading:false, user:payload
+        case REHYDRATE:
+            if(payload?.user){
+                return { ...state, ...payload.user, persistedState: payload };
             }
+            return state;
+            break;
         default:
             return state;
     }

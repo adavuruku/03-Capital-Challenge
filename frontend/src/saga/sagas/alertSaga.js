@@ -1,22 +1,24 @@
-import { delay, put, takeLatest, fork } from 'redux-saga/effects';
+import {delay, put, takeLatest, call, take, fork, takeEvery} from 'redux-saga/effects';
 import * as types from '../action/actionTypes';
 import {createAlert, removeAlert} from '../action/alertAction'
 import {v4 as uuidv4} from "uuid";
 // import { API_BASE_URL, ENDPOINTS } from '../constants/apiEndpoints';
 // import axios from '../utils/axios';
 
-function* createAlertAsync(payload) {
+function* createAlertAsync({payload}) {
     const { msg, id, alertType} = payload
-    const idnew = id ? uuidv4() : id
-    // console.log('idnew',idnew, uuidv4(),id, payload)
-    // yield put(createAlert({ msg, id:idnew, alertType}));
-    // yield delay(5000);
-    // yield put(removeAlert(idnew));
+    yield put(createAlert({ msg, id, alertType}));
+    yield delay(3000);
+    yield put(removeAlert(id));
 }
 
 function* setAlertSaga() {
-    yield takeLatest(types.SET_ALERT_ACTION, createAlertAsync)
+    yield takeEvery(types.SET_ALERT_ACTION, createAlertAsync)
+    // const payload = yield take(types.SET_ALERT_ACTION)
+    // console.log(payload, 'eere')
+    // yield call(createAlertAsync, payload)
 }
+
 export const alertSaga = [
     fork(setAlertSaga),
 ]

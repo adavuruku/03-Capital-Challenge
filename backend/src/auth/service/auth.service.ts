@@ -26,7 +26,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new NotFoundException(`User with Email: ${email}. Not Found`);
+      throw new UnauthorizedException(`User with Email: ${email}. Not Found`);
     }
     // console.log(`${email}:${password}:${user._id}`);
     const isEqual = await bcrypt.compare(password, user.password);

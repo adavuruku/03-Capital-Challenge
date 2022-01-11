@@ -30,7 +30,7 @@ export abstract class BaseRepositoryAbstract<T>
     );
   }
   public async findAll(searchCondition: any, page?: number): Promise<T[]> {
-    const limit = 100;
+    const limit = 4;
     const skip = (page && page > 0 ? page - 1 : 1) * limit;
     return await this.entity
       .find({ ...searchCondition })

@@ -8,7 +8,7 @@ import configuration from '../config/configuration';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
-import { ContactModule } from "./contact/contact.module";
+import { ContactModule } from './contact/contact.module';
 console.log('env app :', process.env.SERVER_SECRET);
 @Module({
   imports: [
