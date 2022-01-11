@@ -1,21 +1,25 @@
-import React, { Fragment, useState } from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {createContact} from "../../saga/action/contactAction";
+import {clearContact, createContact} from "../../saga/action/contactAction";
 import {setAlert} from "../../saga/action/alertAction";
 import {v4 as uuidv4} from "uuid";
-const ContactForm = ({ createContact, setAlert }) => {
+const ContactForm = ({ createContact, setAlert, clearContact }) => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
         phoneNumber: '',
     });
+
     const {
         fullName,
         email,
         phoneNumber
     } = formData;
+    useEffect(()=>{
+        clearContact();
+    },[])
     // const validateEmail = (email) => {
     //     return String(email)
     //         .toLowerCase()
@@ -89,8 +93,9 @@ const ContactForm = ({ createContact, setAlert }) => {
 
 ContactForm.propTypes = {
     createContact: PropTypes.func.isRequired,
+    clearContact: PropTypes.func.isRequired,
     setAlert: PropTypes.func.isRequired,
 };
 
 
-export default connect(null, { createContact, setAlert })(withRouter(ContactForm));
+export default connect(null, { createContact, setAlert, clearContact })(withRouter(ContactForm));

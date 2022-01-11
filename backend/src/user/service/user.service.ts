@@ -15,19 +15,17 @@ import {
   verifyDateExpiry,
 } from '../../_shared/helpers/helpers';
 import * as _ from 'lodash';
-import { MailerService } from '../../mail/services/mail.service';
-import { MailSendgridService } from '../../mail/services/mail.sendgrid.service';
 import { VerifyAccountDto } from '../dtos/verify-account.dto';
 import { SearchRespose } from '../../interphases/search-response';
-import { EmailOption } from '../../interphases/email-option';
 import { ConfigService } from '@nestjs/config';
+import { GoogleEmailService } from '../../mail/services/google-email';
+import { GmailOption } from '../../mail/gmail-structure';
 @Injectable()
 export class UserService implements UserServiceInterface {
   constructor(
     @Inject('UserRepositoryInterface')
     private readonly userRepository: UserRepositoryInterface,
-    private readonly mailerService: MailerService,
-    private readonly mailSendgridService: MailSendgridService,
+    private readonly googleEmailService: GoogleEmailService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -43,14 +41,26 @@ export class UserService implements UserServiceInterface {
       }
       const obj = await this.beforeCreate(userDto);
       const value = await this.userRepository.create(obj);
-      const emailOption = {
+
+      const verifyToken = crypto
+        .createHash('md5')
+        .update(value.verificationCode)
+        .digest('hex');
+      const link = `${this.configService.get(
+        'service.mailOptions.verifyLink',
+      )}/${value.email}/${verifyToken}`;
+
+      const emailOption: GmailOption = {
         to: value.email,
         subject: '03 Capital (Contact App) - Verify Account',
-        from: this.configService.get('service.mailOptions.from'),
-        verifyLink: this.configService.get('service.mailOptions.verifyLink'),
-        verificationCode: value.verificationCode,
+        from: `03 Capital <${this.configService.get(
+          'service.mailOptions.from',
+        )}>`,
+        template: 'verify_account',
+        templatePayload: { fullName: value.fullName, verificationLink: link },
       };
-      await this.sendEmail(emailOption);
+      await this.googleEmailService.sendEmail(emailOption);
+      // await this.sendEmail(emailOption);
       return { value: value, meta: existUser };
     } catch (e) {
       throw new InternalServerErrorException(e);
@@ -113,28 +123,25 @@ export class UserService implements UserServiceInterface {
     }
   }
 
-  /**
-   * @param {EmailOption} option: options of email to send
-   * @return {Object} The user created object
-   */
-  public async sendEmail(option: EmailOption) {
-    try {
-      const verifyToken = crypto
-        .createHash('md5')
-        .update(option.verificationCode)
-        .digest('hex');
-      const link = `${option.verifyLink}/${option.to}/${verifyToken}`;
-      const data = {
-        from: option.from,
-        to: option.to,
-        subject: option.subject,
-        html: `<H3>Your verification Link is <a href="${link}">Click</a> to verify your account<H3/>`,
-      };
-      await this.mailSendgridService.send(data);
-    } catch (e) {
-      throw new InternalServerErrorException(e);
-    }
-  }
+  // /**
+  //  * @param {EmailOption} option: options of email to send
+  //  * @return {Object} The user created object
+  //  */
+  // public async sendEmaily(option: GmailOption) {
+  //   try {
+  //     const data = {
+  //       from: option.from,
+  //       to: option.to,
+  //       subject: option.subject,
+  //       template: option.template,
+  //       fullName: option.payload.fullName,
+  //       verifyLink: option.verificationLink,
+  //     };
+  //     await this.googleEmailService.sendEmail(data);
+  //   } catch (e) {
+  //     throw new InternalServerErrorException(e);
+  //   }
+  // }
 
   /**
    * @param {VerifyAccountDto} verifyDto: payload to verify acoount

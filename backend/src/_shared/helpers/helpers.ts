@@ -4,35 +4,17 @@ import * as bcrypt from 'bcrypt';
 import * as _ from 'lodash';
 import * as randomstring from 'randomstring';
 import * as sgMail from '@sendgrid/mail/index';
+
 import * as dayjs from 'dayjs';
 import * as timezone from 'dayjs/plugin/timezone';
 dayjs.extend(timezone);
 dayjs.tz.setDefault('Africa/Lagos');
 
 /**
- * Convert callback to promise;
- *  @param {String} text
- * @return {String} params date
- */
-
-// export const slugifyText = (text) => {
-// 	if (text === null || typeof text === 'undefined') {
-// 		return text;
-// 	}
-// 	if (text.indexOf(' ') >= 0) {
-// 		return slugify(text.toLowerCase(), '-');
-// 	}
-// 	return text.toLowerCase();
-// };
-
-/**
  * @param {Number} size Hour count
  * @return {Date} The date
  */
 export const addTimeToDate = (size, time) => {
-  // const date = new Date();
-  // const hours = date.getHours() + 1;
-  // date.setHours(hours);
   const expiryTime = dayjs().add(size, time);
   return expiryTime;
 };
@@ -82,14 +64,6 @@ export const recursivelyCleanMongooseDocument = (value: any) => {
   if (Array.isArray(value)) {
     return value.map(recursivelyCleanMongooseDocument);
   }
-  // if (value !== null && typeof value === 'object') {
-  //   return Object.fromEntries(
-  //     Object.entries(value).map(([key, value]) => [
-  //       key,
-  //       recursivelyCleanMongooseDocument(value),
-  //     ]),
-  //   );
-  // }
   if (value !== null) {
     console.log(value, cleanValue);
     const newVal = _.omit({ ...value }, cleanValue);
@@ -100,11 +74,4 @@ export const recursivelyCleanMongooseDocument = (value: any) => {
     console.log(newVal, newyVal);
     return newVal;
   }
-};
-/**
- * @return {String}
- */
-export const getTodayDateTimeStamp = () => {
-  const todayDate = dayjs().format('YYYY-MM-DD').toString();
-  return todayDate;
 };

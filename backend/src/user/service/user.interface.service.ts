@@ -6,6 +6,6 @@ import { VerifyAccountDto } from '../dtos/verify-account.dto';
 import { BaseServiceInterface } from '../../base/service/base.service.interface';
 
 export interface UserServiceInterface extends BaseServiceInterface<User> {
-  sendEmail(option: EmailOption);
+  // sendEmail(option: EmailOption);
   verifyUserAccount(verifyDto: VerifyAccountDto);
 }

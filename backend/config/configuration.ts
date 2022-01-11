@@ -22,14 +22,14 @@ export default () => ({
         production: process.env.DB_TEST_URL,
       },
     },
-    mailgun: {
-      api_key: process.env.MAILGUN_API_KEY,
-      host: process.env.MAILGUN_HOST,
-      domain: process.env.MAILGUN_DOMAIN,
-      username: process.env.MAILGUN_USERNAME,
-    },
-    sendGrid: {
-      api_key: process.env.SENDGRID_API_KEY,
+    gmailService: {
+      oauth_playground: process.env.OAUTH_PLAYGROUND,
+      client_id: process.env.MAILING_SERVICE_CLIENT_ID,
+      client_secret: process.env.MAILING_SERVICE_CLIENT_SECRET,
+      gmail_password: process.env.CONST_GMAIL_ADDRESS,
+      gmail_email: process.env.CONST_GMAIL_PASSWORD,
+      gmail_host: process.env.CONST_EMAIL_HOST,
+      gmail_port: process.env.CONST_EMAIL_PORT,
     },
     mailOptions: {
       from: process.env.VERIFY_ACCOUNT_FROM_EMAIL,
